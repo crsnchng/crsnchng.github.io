@@ -1,0 +1,78 @@
+---
+---
+
+<div class="rounded-lg">
+  <div
+    id="mainNav"
+    class="hidden lg:flex backdrop-blur-lg border border-base-content text-base-content rounded-lg"
+  >
+    <a href="/" class="btn btn-ghost rounded-l-lg rounded-r-none" id="home"
+      >Home</a
+    >
+    <a
+      href="/about/"
+      class="btn btn-ghost rounded-none"
+      id="about">About</a
+    >
+    <a href="/blog/" class="btn btn-ghost rounded-none" id="blog">Blog</a>
+    <a href="/projects/" class="btn btn-ghost rounded-none" id="projects"
+      >Projects</a
+    >
+
+    <a href="/store/" class="btn btn-ghost rounded-l-none rounded-r-lg" id="store">For Sale</a>
+    
+  </div>
+
+  <div class="lg:hidden dropdown dropdown-hover dropdown-end">
+    <label
+      tabindex="0"
+      class="btn btn-ghost border border-current backdrop-blur-sm w-40"
+      >menu</label
+    >
+    <ul
+      tabindex="0"
+      class="dropdown-content z-[1] menu p-2 shadow backdrop-blur-md rounded-box w-52 outline outline-1"
+    >
+      <li><a href="/">Home</a></li>
+      <li><a href="/about/">About</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/projects/">Projects</a></li>
+      <li><a href="/store/">For Sale</a></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const currPage = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("page")) {
+      return localStorage.getItem("page");
+    } else {
+      const currentUrl = new URL(window.location.href);
+      const path = currentUrl.pathname.split("/")[1].toLowerCase();
+      if (path === "") {
+        localStorage.setItemItem("page", "home");
+        return "home";
+      } else {
+        localStorage.setItemItem("page", path);
+        return path;
+      }
+    }
+  })();
+
+  if (currPage != null) {
+    const currPageNavButton = document.getElementById(currPage);
+    if (currPageNavButton != null) {
+      let classesToAdd = [
+        "animate-text",
+        "font-extrabold",
+        "text-transparent",
+        "bg-clip-text",
+        "bg-gradient-to-r",
+        "from-secondary",
+        "via-error",
+        "to-primary",
+      ];
+      currPageNavButton.classList.add(...classesToAdd);
+    }
+  }
+</script>
