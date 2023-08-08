@@ -39,7 +39,9 @@ const { Content } = await post.render();
     <h1>
       {post.data.title}
     </h1>
-
+    <p class="text-xl">
+      {post.data.description}
+    </p>
     <Content />
   </article>
 </BaseLayoutNav>

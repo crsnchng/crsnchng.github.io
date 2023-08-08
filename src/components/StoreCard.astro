@@ -9,11 +9,11 @@ const { title, price, mainImage, description } = Astro.props;
     class="w-96 h-56 rounded-xl object-cover shadow-xl transition group-hover:animate-background group-hover:bg-gradient-to-r group-hover:from-primary group-hover:via-error group-hover:to-secondary group-hover:bg-[length:400%_400%] group-hover:shadow-sm group-hover:[animation-duration:_2s] group-hover:p-1"
   />
 
-  <div class="pt-4">
+  <div class="pt-4 w-96">
+    <h1 class="text-lg font-bold text-error">{price}</h1>
     <h3 class="text-lg font-medium text-inherit">
-      {title} - {price}
+      {title}
     </h3>
-
     <p class="mt-2 line-clamp-3 text-sm/relaxed text-inherit">
       {description}
     </p>
