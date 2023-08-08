@@ -21,8 +21,8 @@ const { Content } = await post.render();
     class="prose prose-base prose-h1:animate-text prose-h1:text-transparent prose-h1:bg-clip-text prose-h1:bg-gradient-to-r prose-h1:from-primary prose-h1:via-error prose-h1:to-secondary"
   >
     <div class="flex flex-col mb-5">
-      <div class="text-inherit font-semibold">
-        <FormattedDate date={post.data.pubDate} />
+      <div class="text-inherit">
+        Initially posted on <span class="text-inherit font-semibold"><FormattedDate date={post.data.pubDate} /></span>
       </div>
       {
         post.data.updatedDate && (
