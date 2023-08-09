@@ -15,7 +15,9 @@ const { title, description } = Astro.props;
 
 <!DOCTYPE html>
 <html lang="en">
-  <BaseHead title={title} description={description} />
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
   <body>
     <div class="mt-10 mx-10 flex flex-col justify-center items-center">
       <div class="w-full z-50 flex justify-evenly items-center sticky top-10">
