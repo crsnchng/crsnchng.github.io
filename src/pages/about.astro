@@ -1,5 +1,7 @@
 ---
 import BaseLayoutNav from "../layouts/BaseLayoutNav.astro";
+import { Image } from "astro:assets";
+import meImage from "../assets/me.JPG";
 ---
 
 <BaseLayoutNav title="About" description="A bit about me">
@@ -7,11 +9,7 @@ import BaseLayoutNav from "../layouts/BaseLayoutNav.astro";
     <section>
       <div class="flex gap-10 flex-wrap justify-evenly items-center">
         <div>
-          <img
-            src="/me.JPG"
-            alt="photo of me"
-            class="w-72 rounded-xl shadow-xl"
-          />
+          <Image src={meImage} alt="me" class="w-72 rounded-xl shadow-xl"/>
         </div>
 
         <div
