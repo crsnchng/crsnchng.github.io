@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import croissantImage from "../assets/croissant.png";
 ---
 
 <a
@@ -7,7 +9,7 @@
   id="croissant"
   class="tooltip h-12 w-16 flex justify-center"
 >
-  <img src="/croissant.png" alt="Croissant" />
+  <Image src={croissantImage} alt="croissant"/>
 </a>
 
 <script>

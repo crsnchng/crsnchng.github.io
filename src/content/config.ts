@@ -17,7 +17,7 @@ const blog = defineCollection({
 });
 
 const store = defineCollection({
-	schema: z.object({
+	schema: ({ image }) => z.object({
 		title: z.string(),
 		description: z.string(),
 		pubDate: z
@@ -28,8 +28,7 @@ const store = defineCollection({
 			.string()
 			.optional()
 			.transform((str) => (str ? new Date(str) : undefined)),
-		images: z.array(z.string()).optional(),
-		mainImage: z.string().optional(),
+		mainImage: image(),
 		price: z.string().optional(),
 		oldPrice: z.string().optional(),
 	}),
