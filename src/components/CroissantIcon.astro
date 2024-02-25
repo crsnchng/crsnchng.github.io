@@ -1,0 +1,43 @@
+---
+import { Image } from "astro:assets";
+import croissantImage from "../assets/croissant.png";
+---
+
+<a
+  href="https://www.youtube.com/watch?v=jSIw5_bFkLY"
+  target="_blank"
+  id="croissant"
+  class="tooltip h-12 w-16 flex justify-center"
+>
+  <Image src={croissantImage} alt="croissant"/>
+</a>
+
+<script>
+  const tooltips = ["yum", "tasty", "croissant", "crispy", "buttery", "flaky", "golden", "delicious","i don't know", "that's all I got right now", "l a y e r s"];
+  const tooltipLocs = [
+    "tooltip-top",
+    "tooltip-bottom",
+    "tooltip-left",
+    "tooltip-right",
+  ];
+
+  const handleHover = (element) => {
+    var croi = document.getElementById("croissant");
+
+    for (let i = 0; i < tooltipLocs.length; i++) {
+      croi.classList.remove(tooltipLocs[i]);
+    }
+
+    croi.setAttribute(
+      "data-tip",
+      tooltips[Math.floor(Math.random() * tooltips.length)]
+    );
+    croi.classList.add(
+      tooltipLocs[Math.floor(Math.random() * tooltipLocs.length)]
+    );
+  };
+
+  document
+    .getElementById("croissant")
+    .addEventListener("mouseover", handleHover);
+</script>

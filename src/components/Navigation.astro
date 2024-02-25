@@ -1,0 +1,67 @@
+---
+---
+
+<div class="rounded-lg">
+  <div
+    id="mainNav"
+    class="hidden lg:flex backdrop-blur-lg border border-base-content text-base-content rounded-lg"
+  >
+    <a href="/" class="btn btn-ghost rounded-l-lg rounded-r-none" id="home"
+      >HOME</a
+    >
+    <a href="/blog/" class="btn btn-ghost rounded-none" id="blog">BLOG</a>
+    <a href="/projects/" class="btn btn-ghost rounded-none" id="projects"
+      >PROJECTS</a
+    >
+    <a href="/about/" class="btn btn-ghost rounded-none" id="about">ABOUT ME</a>
+  </div>
+
+  <details class="dropdown dropdown-end border border-current rounded-lg backdrop-blur-sm w-36 lg:hidden">
+    <summary class="btn btn-ghost w-full"
+      ><menu>MENU</summary
+    >
+    <ul
+      class="dropdown-content z-[1] menu p-2 shadow backdrop-blur-md rounded-box w-52 outline outline-1"
+    >
+      <li class="font-bold"><a href="/">HOME</a></li>
+      <li class="font-bold"><a href="/blog/">BLOG</a></li>
+      <li class="font-bold"><a href="/projects/">PROJECTS</a></li>
+      <li class="font-bold"><a href="/about/">ABOUT ME</a></li>
+    </ul>
+  </details>
+
+  <script>
+    const currPage = (() => {
+      if (typeof localStorage !== "undefined" && localStorage.getItem("page")) {
+        return localStorage.getItem("page");
+      } else {
+        const currentUrl = new URL(window.location.href);
+        const path = currentUrl.pathname.split("/")[1].toLowerCase();
+        if (path === "") {
+          localStorage.setItemItem("page", "home");
+          return "home";
+        } else {
+          localStorage.setItemItem("page", path);
+          return path;
+        }
+      }
+    })();
+
+    if (currPage != null) {
+      const currPageNavButton = document.getElementById(currPage);
+      if (currPageNavButton != null) {
+        let classesToAdd = [
+          "animate-text",
+          "font-extrabold",
+          "text-transparent",
+          "bg-clip-text",
+          "bg-gradient-to-r",
+          "from-secondary",
+          "via-error",
+          "to-primary",
+        ];
+        currPageNavButton.classList.add(...classesToAdd);
+      }
+    }
+  </script>
+</div>

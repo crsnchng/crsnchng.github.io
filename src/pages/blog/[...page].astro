@@ -1,0 +1,91 @@
+---
+import { getCollection } from "astro:content";
+import BlogCard from "../../components/BlogCard.astro";
+import BaseLayoutNav from "../../layouts/BaseLayoutNav.astro";
+
+export async function getStaticPaths({ paginate }) {
+  const posts = (await getCollection("blog"))
+    .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+  return paginate(posts, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayoutNav
+  title="Blog"
+  description="Might be something worth reading in here"
+>
+  <div class="w-3/4 flex flex-col items-center gap-20">
+    <div class="flex flex-col gap-5">
+      <p class="text-4xl font-bold text-center">Blog &#128220;</p>
+
+      <p class="text-xl text-secondary text-center">
+        Might be something worth reading here.
+      </p>
+    </div>
+
+    <div class="w-full flex flex-wrap gap-10 justify-evenly items-center">
+      {
+        page.data.map((post) => (
+          <a href={`/blog/${post.slug}/`}>
+            <BlogCard
+              title={post.data.title}
+              pubDate={post.data.pubDate}
+              tags={post.data.tags}
+            />
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="w-full flex flex-wrap gap-20 justify-center items-center mt-20">
+      {
+        !page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="btn btn-ghost btn-disabled btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Previous
+          </a>
+        )
+      }
+      {
+        page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="btn btn-ghost btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Previous
+          </a>
+        )
+      }
+      <p class="text-3xl font-bold">
+        <span
+          class="animate-text text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+          >{page.currentPage} / {page.lastPage}</span
+        >
+      </p>
+      {
+        !page.url.next && (
+          <a
+            href={page.url.next}
+            class="btn btn-ghost btn-disabled btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Next
+          </a>
+        )
+      }
+      {
+        page.url.next && (
+          <a
+            href={page.url.next}
+            class="btn btn-ghost btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Next
+          </a>
+        )
+      }
+    </div>
+  </div>
+</BaseLayoutNav>

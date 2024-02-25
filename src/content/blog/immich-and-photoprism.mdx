@@ -1,0 +1,136 @@
+---
+title: 'Immich Overview & Looking Back on PhotoPrism'
+description: 'Preferred solution to self hosted photo management is Immich (for now)'
+pubDate: 'Feb 14 2023'
+updatedDate: 'Feb 14 2023'
+tags: ['Self Hosting', 'Immich', 'Photos', 'PhotoPrism']
+---
+
+## Credit to PhotoPrism 
+
+Firstly, I want to give a shoutout to [PhotoPrism](https://github.com/photoprism/photoprism). When I first started self hosting, PhotoPrism was a more mature software than Immich. I've used PhotoPrism along with PhotoSync on my iPhone for about a year now and it's been mostly fantastic. 
+
+## PhotoPrism vs Immich
+
+### Setup
+
+I can't quite remember the specifics but I don't recall having much difficulty getting PhotoPrism stood up; The biggest pain was setting up the PhotoSync app (and paying for it but, alas, it was needed and very inexpensive). Once everything was up, it mostly worked without issue. PhotoSync's auto upload feature never seemed to work, though, and I found myself manually syncing when I wanted to get photos into PhotoPrism.
+
+Immich's setup on paper is very straightforward but I had to do some digging to figure out how to split up volumes so that I could have thumbnails separate from originals and configure a few other settings (more on this later). After some testing and fine tuning of the docker compose file, the setup took no time at all and adding existing libraries was trivial.
+
+### Feature Set and UX/UI
+
+This is really what moved me to give Immich a try. I was reading a [Hacker News post](https://news.ycombinator.com/item?id=39336890) about Immich changing it's license and one of the comments mentioned that Immich is essentially a full blown Google Photos alternative now. I didn't recall Immich's feature set being at the level of Google Photos back when I had set up PhotoPrism, so I was very intrigued. I went to the website and was pleasantly surprised to see that the HN user wasn't lying.
+
+**Stand out Immich features compared to PhotoPrism**:
+- A much better UX/UI (in my opinion). It feels very similar to Google Photos. PhotoPrism always felt very utilitarian which isn't necessarily a bad thing, I just didn't like it as much.
+- Native mobile apps.
+- Better face detection and people management - I spent way less time merging faces from my existing library in Immich than I did in PhotoPrism.
+- Seriously better search - Back when I used Google Photos, I was always blown away by the accuracy of its searching and I accepted PhotoPrism's less accurate experience as a toll of self hosting. Immich blew me away much like Google Photos did.
+- Included UI for user management.
+- "Memories" - A feature I sincerely missed when leaving Google Photos.
+
+## Potentially Helpful Findings During Immich Setup
+
+Due to some interesting decisions, I ended up spending roughly 2 days setting up Immich and I probably set up and deleted it 10 different times. Long story short, along with extensively testing my docker compose for Immich, I also decided to change which drive my Docker app data was stored on and I ended up corrupting a lot of data. Luckily, I use the Unraid plugin [Appdata Backup](https://github.com/Commifreak/unraid-appdata.backup) which saved my server. Moral of the story: have a backup plan.
+
+### Docker Compose and Environment Variables
+
+They have documentation for a lot of this but I figured I would consolidate the things that helped me the most.
+
+**Here's how to add CUDA acceleration to the machine learning container ([Official Docs](https://immich.app/docs/features/ml-hardware-acceleration))**:
+
+```
+immich-machine-learning:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities:
+                - gpu
+                - compute
+                - video
+```
+
+**Here's how to add an existing library to your install ([Official Docs](https://immich.app/docs/features/libraries#usage))**:
+
+```
+immich-server:
+    volumes:
+      - /mnt/path/to/your/photos:/mnt/media/existinglibrary:ro
+      - /mnt/path/to/your/photos2:/mnt/media/existinglibrary2:ro
+
+immich-microservices:
+    volumes:
+      - /mnt/path/to/your/photos:/mnt/media/existinglibrary:ro
+      - /mnt/path/to/your/photos2:/mnt/media/existinglibrary2:ro
+```
+
+After this, you have to edit your Immich user and add '/mnt/media/' as the External Path and then go to your Account Settings -> Libraries -> Create External Library, click Edit Import Paths for the newly created Library, select Edit Import Paths, and add the path /mnt/media/existinglibrary. You can then select "Scan New Library Files" on your new External Library and Immich will start indexing.
+
+**Here's how to separate your thumbnails/other files and originals ([GitHub Discussion I found on this](https://github.com/immich-app/immich/discussions/2328))**:
+
+In your environment file:
+
+```
+LIBRARY_LOCATION=/mnt/path/to/library(originals)
+THUMBS_LOCATION=/mnt/somewhere/you/may/store/appdata/thumbs/
+UPLOAD_LOCATION=/mnt/somewhere/you/may/store/appdata/upload/
+PROFILE_LOCATION=/mnt/somewhere/you/may/store/appdata/profile/
+VIDEO_LOCATION=/mnt/somewhere/you/may/store/appdata/encoded-video/
+```
+
+In your compose:
+
+```
+immich-server:
+    volumes:
+        - ${LIBRARY_LOCATION}:/usr/src/app/upload/library
+        - ${UPLOAD_LOCATION}:/usr/src/app/upload/upload
+        - ${THUMBS_LOCATION}:/usr/src/app/upload/thumbs
+        - ${PROFILE_LOCATION}:/usr/src/app/upload/profile
+        - ${VIDEO_LOCATION}:/usr/src/app/upload/encoded-video
+      
+immich-microservices:
+    volumes:
+        - ${LIBRARY_LOCATION}:/usr/src/app/upload/library
+        - ${UPLOAD_LOCATION}:/usr/src/app/upload/upload
+        - ${THUMBS_LOCATION}:/usr/src/app/upload/thumbs
+        - ${PROFILE_LOCATION}:/usr/src/app/upload/profile
+        - ${VIDEO_LOCATION}:/usr/src/app/upload/encoded-video
+```
+
+The user in the GitHub discussion answer states to also put the above under the machine learning container as well but I left that out and things have worked as expected. The volumes for the server and microservices match throughout the documentation but the ML container only ever has the one line. This is why I chose to exclude the volumes from it.
+
+Separately, the official compose example only has this volume:
+
+```
+${UPLOAD_LOCATION}:/usr/src/app/upload
+```
+
+Initially, I was confused about whether or not to put the other folders at that level as well for example app/thumbs and app/upload but I left it as it was from the GitHub answer and things are separating out as expected.
+
+**I somehow always manage to forget how to use existing docker networks in my compose files so I'm just going to put this here**:
+
+At the bottom of your compose file:
+
+```
+networks:
+    literallyanyname1:
+        name: existingnetworkname
+        external: true
+```
+
+Under your app in services:
+
+```
+app-name:
+    networks:
+      - literallyanyname1
+```
+
+## Au Revoir
+
+Immich is a super exciting application and I'm glad to see it has improved so much over the past year. It's incredibly easy to use and absolutely a full blown open source, self hostable Google Photos replacement. I'm thankful for the stability of PhotoPrism for the past year but I'm excited to continue using Immich and see what other features the devs come up with.

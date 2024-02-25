@@ -1,0 +1,33 @@
+---
+import BaseLayoutNav from "../layouts/BaseLayoutNav.astro";
+---
+
+<BaseLayoutNav title="404" description="Page not found">
+  <div class="flex flex-col w-full items-center justify-center my-48">
+    <div class="mockup-window border bg-inherit border-error w-3/4 xl:w-1/2">
+      <div
+        class="flex flex-col px-4 py-16 bg-base-200 items-center justify-center"
+      >
+        <div class="relative">
+          <div class="absolute -right-3 -top-2">
+            <span class="relative flex h-3 w-3">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"
+              ></span>
+              <span class="inline-flex rounded-full h-3 w-3 bg-error"></span>
+            </span>
+          </div>
+          <h1 class="text-5xl font-bold text-error mb-2">404</h1>
+        </div>
+        <p class="font-bold text-error text-2xl mb-10 text-center">
+          Page not found!
+        </p>
+        <div onclick="
+        history.back()
+" class="btn btn-outline rounded-lg">
+          back
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayoutNav>

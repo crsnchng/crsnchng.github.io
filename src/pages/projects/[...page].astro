@@ -1,0 +1,94 @@
+---
+import BaseLayoutNav from "../../layouts/BaseLayoutNav.astro";
+import { getCollection } from "astro:content";
+import ProjectCard from "../../components/ProjectCard.astro";
+
+export async function getStaticPaths({ paginate }) {
+  const projects = (await getCollection("project"))
+    .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+  return paginate(projects, { pageSize: 6 });
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayoutNav
+  title="Projects"
+  description="Projects I've been working on or have completed"
+>
+  <div class="flex flex-col gap-20 items-center">
+    <div class="flex flex-col gap-5">
+      <p class="text-4xl font-bold text-center">Projects &#128679;</p>
+      <p class="text-xl text-secondary text-center">
+        Projects I've been working on or have completed and that I care enough
+        about to document.
+      </p>
+    </div>
+
+    <div class="w-full flex flex-wrap gap-10 justify-evenly items-center">
+      {
+        page.data.map((project) => (
+          <a href={`/projects/${project.slug}/`}>
+            <ProjectCard
+              title={project.data.title}
+              pubDate={project.data.pubDate}
+              updateDate={project.data.updatedDate}
+              description={project.data.description}
+            />
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="w-full flex flex-wrap gap-20 justify-center items-center mt-20">
+      {
+        !page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="btn btn-ghost btn-disabled btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Previous
+          </a>
+        )
+      }
+      {
+        page.url.prev && (
+          <a
+            href={page.url.prev}
+            class="btn btn-ghost btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Previous
+          </a>
+        )
+      }
+      <p class="text-3xl font-bold">
+        <span
+          class="animate-text text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+          >{page.currentPage} / {page.lastPage}</span
+        >
+      </p>
+      {
+        !page.url.next && (
+          <a
+            href={page.url.next}
+            id="prev"
+            class="btn btn-ghost btn-disabled btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Next
+          </a>
+        )
+      }
+      {
+        page.url.next && (
+          <a
+            href={page.url.next}
+            id="prev"
+            class="btn btn-ghost btn-outline btn-wide rounded-lg hover:bg-gradient-to-r hover:from-primary hover:to-secondary"
+          >
+            Next
+          </a>
+        )
+      }
+    </div>
+  </div>
+</BaseLayoutNav>

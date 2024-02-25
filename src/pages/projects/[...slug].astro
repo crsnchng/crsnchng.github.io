@@ -1,0 +1,47 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+import BaseLayoutNav from "../../layouts/BaseLayoutNav.astro";
+
+export async function getStaticPaths() {
+  const items = await getCollection("project");
+  return items.map((item) => ({
+    params: { slug: item.slug },
+    props: item,
+  }));
+}
+type Props = CollectionEntry<"project">;
+
+const item = Astro.props;
+const { Content } = await item.render();
+---
+
+<BaseLayoutNav title={item.data.title} description={item.data.description}>
+  <article
+    class="prose prose-base prose-h1:animate-text prose-h1:text-transparent prose-h1:bg-clip-text prose-h1:bg-gradient-to-r prose-h1:from-primary prose-h1:via-error prose-h1:to-secondary"
+  >
+    <div class="flex flex-col mb-5">
+      <div class="text-inherit ">
+        Started on <span class="text-inherit font-semibold"><FormattedDate date={item.data.pubDate} /></span>
+      </div>
+      {
+        item.data.updatedDate && (
+          <div class="text-inherit">
+            Last updated on{" "}
+            <span class="text-secondary font-semibold">
+              <FormattedDate date={item.data.updatedDate} />
+            </span>
+          </div>
+        )
+      }
+    </div>
+
+    <h1>
+      {item.data.title}
+    </h1>
+    <p class="text-xl">
+      {item.data.description}
+    </p>
+    <Content />
+  </article>
+</BaseLayoutNav>

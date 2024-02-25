@@ -1,0 +1,94 @@
+---
+import BaseLayoutNav from "../layouts/BaseLayoutNav.astro";
+import { Image } from "astro:assets";
+import meImage from "../assets/me.JPG";
+---
+
+<BaseLayoutNav title="About" description="A bit about me">
+  <div class="flex flex-col gap-10 w-full xl:w-3/4">
+    <section>
+      <div class="flex gap-10 flex-wrap justify-evenly items-center">
+        <div>
+          <Image src={meImage} alt="me" class="w-72 rounded-xl shadow-xl"/>
+        </div>
+
+        <div
+          class="text-inherit w-full xl:w-3/4 px-4 py-8 sm:py-12 sm:px-6 lg:py-16 lg:px-12"
+        >
+          <h2 class="text-3xl font-bold">An overview</h2>
+          <p class="mt-4">
+          I am a passionate and versatile professional, proud to be what I
+          would consider a modern-day jack of all trades within the technology
+          industry. I have extensive experience in various domains, ranging
+          from general managed IT services, network
+          administration/implementation, and SaaS administration to general
+          web development, Python, project management, inside sales, account
+          management, and day-to-day help desk work. I enjoy the challenges
+          each facet brings and try my best to improve processes and learn new
+          things along the way. However, my true passion lies in development,
+          where I find joy in both creating and continually expanding my
+          knowledge base.
+            
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-base-200 text-inherit rounded-3xl shadow-lg">
+      <div class="px-12 py-12">
+        <h2 class="text-3xl font-bold">About the croissant</h2>
+        <p class="mt-4">
+          A few things: I really enjoy croissants, I named the initial project/repo
+          for this site 'croissant', and I was given the nickname croissant
+          while I was mentoring a robotics team in highschool. The croissant
+          also provides some much needed character to the upper left corner of
+          this site. The link on the croissant is a YouTube video about
+          croissants posted by one of my favorite food content creators.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <div
+        class="flex gap-10 justify-center flex-wrap xl:gap-10 xl:flex-nowrap"
+      >
+        <section class="bg-base-200 text-inherit rounded-3xl shadow-lg">
+          <div
+            class="px-12 py-12"
+          >
+            <h2 class="text-3xl font-bold">Hobbies</h2>
+            <p class="mt-4">
+              Self hosting is a huge one. I recently moved all my files, photos,
+              calendars, and contacts off of Google/Apple to a custom built
+              server. It's been a fantastic learning experience for both server
+              and networking knowledge and it feels good to host my own
+              software. Other than that, I've gotten pretty deep into the whole
+              coffee thing over the past few years. Started with pour overs,
+              graduated to making cold brew, got lazy and started buying coffee
+              everyday, made some friends along the way, and now I make espresso
+              at home almost every morning. I also enjoy climbing - it's a great time.
+            </p>
+          </div>
+        </section>
+        <section class="bg-base-200 text-inherit rounded-3xl shadow-lg">
+          <div
+            class="px-12 py-12"
+          >
+            <h2 class="text-3xl font-bold">Skills</h2>
+            <p class="mt-4">
+              I have a strong working knowledge of Python, Git, GitHub Actions,
+              Azure Functions and related Infrastructure, JS, HTML, and CSS.
+              Additionally, I am highly capable in any tech support/managed IT services
+              environment that requires Azure/M365 Administration, Network
+              Administration, Server Administration, or General Technical
+              Support. In that same vein, I've picked up a good amount of
+              knowledge and wisdom on retail specific technology and
+              deployments. I can manage projects, manage accounts, and provide
+              consulting as well. Separately, I think I can make fairly decent espresso now.
+            </p>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+</BaseLayoutNav>

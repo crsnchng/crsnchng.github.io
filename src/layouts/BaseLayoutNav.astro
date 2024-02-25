@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+import Navigation from "../components/Navigation.astro";
+import CroissantIcon from "../components/CroissantIcon.astro";
+import ThemeSwitch from "../components/ThemeSwitch.astro";
+import Footer from "../components/Footer.astro";
+import BaseHead from "../components/BaseHead.astro";
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <div class="mt-10 mx-10 flex flex-col justify-center items-center">
+      <div class="w-full lg:w-3/4 z-50 flex justify-between items-center sticky top-10">
+        <CroissantIcon />
+        <Navigation />
+        <ThemeSwitch />
+      </div>
+      <div class="flex justify-center w-full z-0 mt-24">
+        <slot />
+      </div>
+    </div>
+    <Footer />
+    <script>
+      const currentUrl = new URL(window.location.href);
+      const path = currentUrl.pathname.split("/")[1].toLowerCase();
+      if (path === "") {
+        localStorage.setItem("page", "home");
+      } else {
+        localStorage.setItem("page", path);
+      }
+
+      const theme = (() => {
+        if (
+          typeof localStorage !== "undefined" &&
+          localStorage.getItem("theme")
+        ) {
+          return localStorage.getItem("theme");
+        }
+        if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+          return "dark";
+        }
+        return "garden";
+      })();
+
+      if (theme === "garden") {
+        document.documentElement.setAttribute("data-theme", "garden");
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+
+      if (theme != null) {
+        window.localStorage.setItem("theme", theme);
+      }
+    </script>
+  </body>
+</html>

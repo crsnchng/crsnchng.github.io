@@ -1,0 +1,43 @@
+---
+import { CollectionEntry, getCollection } from "astro:content";
+import FormattedDate from "../../components/FormattedDate.astro";
+import BaseLayoutNav from "../../layouts/BaseLayoutNav.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+type Props = CollectionEntry<"blog">;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayoutNav title={post.data.title} description={post.data.description}>
+  <article
+    class="w-full prose prose-base prose-h1:animate-text prose-h1:text-transparent prose-h1:bg-clip-text prose-h1:bg-gradient-to-r prose-h1:from-primary prose-h1:via-error prose-h1:to-secondary"
+  >
+    <h1>
+      {post.data.title}
+    </h1>
+    <div class="flex flex-col mb-5">
+      <div class="text-inherit">
+        Initially posted on <span class="text-inherit font-semibold"><FormattedDate date={post.data.pubDate} /></span>
+      </div>
+      {
+        post.data.updatedDate && (
+          <div class="text-inherit">
+            Last updated on{" "}
+            <span class="text-secondary font-semibold">
+              <FormattedDate date={post.data.updatedDate} />
+            </span>
+          </div>
+        )
+      }
+    </div>
+    <Content />
+  </article>
+</BaseLayoutNav>

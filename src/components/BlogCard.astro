@@ -1,0 +1,30 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+const { title, pubDate, tags } = Astro.props;
+---
+
+<div
+  class="hover:animate-background rounded-xl bg-gradient-to-r from-primary via-error to-secondary p-1 shadow-xl transition hover:bg-[length:400%_400%] hover:shadow-sm hover:[animation-duration:_4s]"
+>
+  <div
+    class="w-64 h-56 lg:w-96 rounded-[10px] bg-base-100 p-4 sm:p-6 flex flex-col justify-between"
+  >
+    <div class="block text-xs text-secondary">
+      <FormattedDate date={pubDate} />
+    </div>
+
+    <h3 class="mt-0.5 text-lg font-bold text-inherit">
+      {title}
+    </h3>
+
+    <div class="mt-4 flex flex-wrap gap-1">
+      {
+        tags?.map((tag) => (
+          <span class="whitespace-nowrap p-2 rounded-xl bg-secondary text-xs text-primary-content">
+            {tag}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</div>
